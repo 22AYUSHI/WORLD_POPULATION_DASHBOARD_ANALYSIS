@@ -1,0 +1,164 @@
+---
+title: "WORLD POPULATION DASHBOARD"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(highcharter)
+library(viridis)
+library(htmltools)
+
+```
+```{r}
+df<-read_csv("C:\\Users\\dell\\Downloads\\WORLD POPULATION.csv",show_col_types=FALSE)
+
+```
+
+POPULATION
+=======================================================================
+Column {.tabset .tabset-fade data-width=650}
+-----------------------------------------------------------------------
+
+
+### Continent
+```{r}
+custom_colors<-viridis::viridis(n=1)
+df %>%
+  group_by(`Continent`) %>%
+  hchart('column', hcaes(x = `Continent`,
+                         y = `2022 Population`,
+                         color=custom_colors)) %>%
+  hc_add_theme(hc_theme_google()) %>%
+  hc_tooltip(pointFormat = 'Highest Population In Year 2020: </b> {point.y} <br>') %>%
+  hc_title(text = 'Populated Continent ', style = list(fontSize = '25px', fontWeight = 'bold')) %>%
+  hc_subtitle(text = 'In Year 2022', style = list(fontSize = '16px' ))%>%
+  hc_credits(enabled = TRUE, text = '@kaggle')
+
+
+
+```
+### Country
+```{r}
+custom_colors<-viridis::plasma(n=1)
+df %>%
+  group_by(`Country/Territory`) %>%
+  arrange(desc(`2022 Population`))%>%
+  head(5) %>%
+  hchart('column', hcaes(x = `Country/Territory`,
+                         y = `2022 Population`,
+                         color=custom_colors)) %>%
+  hc_add_theme(hc_theme_google()) %>%
+  hc_tooltip(pointFormat = 'Highest Population In Year 2020: </b> {point.y} <br>') %>%
+  hc_title(text = 'Populated Country/Territory ', style = list(fontSize = '25px', fontWeight = 'bold')) %>%
+  hc_subtitle(text = 'In Year 2022', style = list(fontSize = '16px' ))%>%
+  hc_credits(enabled = TRUE, text = '@kaggle')
+```
+### Rank
+```{r}
+custom_colors<-viridis::plasma(n=5)
+df %>%
+  group_by(`Country/Territory`) %>%
+  head(5) %>%
+ 
+  hchart('column', hcaes(x = `Country/Territory`,
+                         y = `Rank`,
+                         color=custom_colors)) %>%
+  hc_add_theme(hc_theme_google()) %>%
+  hc_tooltip(pointFormat = 'Showing Rank of Country/Territory: </b> {point.y} <br>') %>%
+  hc_title(text = 'Country/Territory vs Rank', style = list(fontSize = '25px', fontWeight = 'bold')) %>%
+  hc_subtitle(text = 'In Year 2022', style = list(fontSize = '16px' ))%>%
+  hc_credits(enabled = TRUE, text = '@kaggle')
+```
+### Population Percentage
+```{r}
+custom_colors<-viridis::inferno(n=5)
+df %>%
+  group_by(`World Population Percentage`) %>%
+   arrange(desc(`2022 Population`))%>%
+  head(5) %>%
+  hchart("area", hcaes(x = `World Population Percentage`,
+                         y = `2022 Population`),color=custom_colors) %>%
+  hc_add_theme(hc_theme_google()) %>%
+  hc_tooltip(pointFormat = 'World Population Percentage In Year 2020: </b> {point.y} <br>') %>%
+  hc_title(text = 'Population Percentage ', style = list(fontSize = '25px', fontWeight = 'bold')) %>%
+  hc_subtitle(text = 'In Year 2022', style = list(fontSize = '16px' ))%>%
+  hc_credits(enabled = TRUE, text = '@kaggle')
+```
+
+
+
+
+Column {data-width=450}
+-----------------------------------------------------------------------
+
+### Density
+
+```{r}
+
+custom_colors<-viridis::viridis(n=5)
+df %>%
+  group_by(`CCA3`) %>%
+  arrange(desc(`Density (per km²)`)) %>%
+  head(5) %>%
+  hchart('area', hcaes(x = `CCA3`,
+                         y = `Density (per km²)`,
+                         color=custom_colors)) %>%
+  hc_add_theme(hc_theme_google()) %>%
+  hc_tooltip(pointFormat = 'Maximum Density: </b> {point.y} <br>') %>%
+  hc_title(text = 'Top 5 Country Maximum Density', style = list(fontSize = '15px', fontWeight = 'bold')) %>%
+ 
+  hc_credits(enabled = TRUE, text = '@kaggle')
+```
+
+### Area
+
+```{r}
+
+custom_colors<-viridis::inferno(n=5)
+df %>%
+  group_by(`CCA3`) %>%
+  arrange(desc(`Area (km²)`)) %>%
+  head(5) %>%
+  hchart('line', hcaes(x = `CCA3`,
+                         y = `Area (km²)`,
+                         color=custom_colors)) %>%
+  hc_add_theme(hc_theme_google()) %>%
+  hc_tooltip(pointFormat = 'Maximum Area acc. to CCA3: </b> {point.y} <br>') %>%
+  hc_title(text = 'Top 5 Country Maximum Area ', style = list(fontSize = '15px', fontWeight = 'bold')) %>%
+ 
+  hc_credits(enabled = TRUE, text = '@kaggle')
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Growth Rate
+```{r}
+custom_colors<-viridis::plasma(n=5)
+df %>%
+  group_by(`CCA3`) %>%
+  arrange(desc(`Growth Rate`)) %>%
+  head(5) %>%
+  hchart('pie', hcaes(x = `CCA3`,
+                         y = `Growth Rate`,
+                         color=custom_colors)) %>%
+  
+  hc_add_theme(hc_theme_google()) %>%
+  hc_tooltip(pointFormat = 'Highest Growth Rate: </b> {point.y} <br>') %>%
+  hc_title(text = 'Top 5 Country Highest Growth rate ', style = list(fontSize = '15px', fontWeight = 'bold')) %>%
+ 
+  hc_credits(enabled = TRUE, text = '@kaggle')
+```
+
+
+
+
+
+
+
+
